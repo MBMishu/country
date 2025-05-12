@@ -201,3 +201,10 @@ def fetch_countries(request):
         return JsonResponse({'message': 'Countries fetched and saved successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'error': 'Failed to fetch countries'}, status=response.status_code)
+
+
+@api_view(['GET'])
+def CountryListView(request):
+    countries = Country.objects.all()
+    serializer = CountrySerializer(countries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
