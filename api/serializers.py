@@ -191,23 +191,23 @@ class CountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ['name', 'official','nativeName','tld',
-                  'cca2', 'ccn3', 'cioc', 'independent','status','un_member','currency',
-                  'idd','capital','altSpellings','region',
-                  'subregion','languages','latitude','longitude','landlocked','borders','area',
-                  'demonyms','cca3','translations','flag_emoji','google_maps','openstreet_maps','population',
-                  'gini','fifa','car','timezones','continents',
-                  'flags','coatOfArms','startOfWeek','capitalInfo','postalCode'
-                  ]
         # fields = ['name', 'official','nativeName','tld',
-        #           'cca2', 'cca3', 'cioc', 'independent','status','un_member','currency',
-        #           'idd','capital','alt_spellings_values','region',
-        #           'subregion','languages_value','latitude','longitude','landlocked','borders_value',
-        #           'area','demonym','cca3','translations_value','flag_emoji',
-        #           'google_maps','openstreet_maps','population','gini_value',
-        #           'fifa','car','timezones_value','continent',
-        #           'flag_value','coat_of_arms_value','startOfWeek','capital_info_value','postal_code',
+        #           'cca2', 'ccn3', 'cioc', 'independent','status','un_member','currency',
+        #           'idd','capital','altSpellings','region',
+        #           'subregion','languages','latitude','longitude','landlocked','borders','area',
+        #           'demonyms','cca3','translations','flag_emoji','google_maps','openstreet_maps','population',
+        #           'gini','fifa','car','timezones','continents',
+        #           'flags','coatOfArms','startOfWeek','capitalInfo','postalCode'
         #           ]
+        fields = ['name', 'official','nativeName','tld',
+                  'cca2', 'cca3', 'cioc', 'independent','status','un_member','currency',
+                  'idd','capital','alt_spellings_values','region',
+                  'subregion','languages_value','latitude','longitude','landlocked','borders_value',
+                  'area','demonym','cca3','translations_value','flag_emoji',
+                  'google_maps','openstreet_maps','population','gini_value',
+                  'fifa','car','timezones_value','continent',
+                  'flag_value','coat_of_arms_value','startOfWeek','capital_info_value','postal_code',
+                  ]
         
 
     
