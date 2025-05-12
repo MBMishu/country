@@ -1,0 +1,8 @@
+pillow
+django
+pandas
+djangorestframework
+markdown
+django-cors-headers
+requests
+beautifulsoup4
