@@ -5,4 +5,3 @@ djangorestframework
 markdown
 django-cors-headers
 requests
-beautifulsoup4
