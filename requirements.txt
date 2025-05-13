@@ -5,3 +5,4 @@ djangorestframework
 markdown
 django-cors-headers
 requests
+psycopg2
