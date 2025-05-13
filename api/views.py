@@ -2,6 +2,7 @@ import requests
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -203,15 +204,42 @@ def fetch_countries(request):
         return JsonResponse({'error': 'Failed to fetch countries'}, status=response.status_code)
 
 
+
+
+@api_view(['GET'])
+def CountryListView(request,name=None):
+    countries = Country.objects.all()
+    serializer = CountryListSerializer(countries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def CountryListView(request,name=None):
     countries = Country.objects.all()
     
     if name:
-        countries = countries.filter(name__icontains=name)
+        countries = countries.filter(Q(name__icontains=name) | Q(official__icontains=name) | Q(cca2__icontains=name))
     
-    
-    serializer = CountrySerializer(countries, many=True)
-    
-    
+    serializer = CountryListSerializer(countries, many=True)
+     
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def CountryDetailView(request, cca2):
+    country = get_object_or_404(Country, cca2=cca2)
+    serializer = CountrySerializer(country)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def SameRegionCountriesView(request, cca2):
+    country = get_object_or_404(Country, cca2=cca2)
+    same_region_countries = Country.objects.filter(region=country.region).exclude(cca2=cca2)
+    serializer = CountryListSerializer(same_region_countries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def CountriesByLanguageView(request, language):
+    countries = Country.objects.filter(
+        Q(languages__name__icontains=language) | Q(languages__code__icontains=language)
+    ).distinct()
+    serializer = CountryListSerializer(countries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

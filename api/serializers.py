@@ -211,4 +211,7 @@ class CountrySerializer(serializers.ModelSerializer):
         
 
     
-        
+class CountryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['name', 'official', 'cca2','region', 'subregion']       

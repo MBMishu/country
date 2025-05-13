@@ -9,4 +9,10 @@ urlpatterns = [
     path('fetch-countries/', views.fetch_countries, name='fetch-countries'),
     path('countries/', views.CountryListView, name='country-list'),
     path('countries/<str:name>', views.CountryListView, name='country-list'),
+    
+    path('country-details/<str:cca2>', views.CountryDetailView, name='country-details'),
+
+    path('same-region/<str:cca2>/', views.SameRegionCountriesView, name='same-region'),
+    path('same-language/<str:language>/', views.CountriesByLanguageView, name='same-language'),
+
 ]
