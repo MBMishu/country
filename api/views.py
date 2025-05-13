@@ -205,13 +205,14 @@ def fetch_countries(request):
 
 
 
-
+# list all countries
 @api_view(['GET'])
 def CountryListView(request,name=None):
     countries = Country.objects.all()
     serializer = CountryListSerializer(countries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# search countries by name
 @api_view(['GET'])
 def CountryListView(request,name=None):
     countries = Country.objects.all()
@@ -223,12 +224,7 @@ def CountryListView(request,name=None):
      
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def CountryDetailView(request, cca2):
-    country = get_object_or_404(Country, cca2=cca2)
-    serializer = CountrySerializer(country)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
+# same region countries
 @api_view(['GET'])
 def SameRegionCountriesView(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
@@ -236,6 +232,7 @@ def SameRegionCountriesView(request, cca2):
     serializer = CountryListSerializer(same_region_countries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# countries by language
 @api_view(['GET'])
 def CountriesByLanguageView(request, language):
     countries = Country.objects.filter(
@@ -243,3 +240,27 @@ def CountriesByLanguageView(request, language):
     ).distinct()
     serializer = CountryListSerializer(countries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+# country details by cca2
+@api_view(['GET'])
+def CountryDetailView(request, cca2):
+    country = get_object_or_404(Country, cca2=cca2)
+    serializer = CountrySerializer(country)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# create new entry
+@api_view(['POST'])
+def create_country(request):
+    if request.method == 'POST':
+        serializer = CountrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# delete country  
+@api_view(['DELETE'])
+def delete_country(request, cca2):
+    country = get_object_or_404(Country, cca2=cca2)
+    country.delete()
+    return Response({"detail": "Country deleted."}, status=status.HTTP_204_NO_CONTENT)

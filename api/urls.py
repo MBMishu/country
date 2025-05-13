@@ -14,5 +14,8 @@ urlpatterns = [
 
     path('same-region/<str:cca2>/', views.SameRegionCountriesView, name='same-region'),
     path('same-language/<str:language>/', views.CountriesByLanguageView, name='same-language'),
-
+    
+    
+    path('countries/create/', views.create_country, name='create_country'),
+    path('countries/<str:cca2>/delete/', views.delete_country, name='delete-country'),
 ]

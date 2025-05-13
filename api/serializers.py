@@ -212,6 +212,43 @@ class CountrySerializer(serializers.ModelSerializer):
 
     
 class CountryListSerializer(serializers.ModelSerializer):
+    capital = serializers.SerializerMethodField()
+    timezones = serializers.SerializerMethodField()
+    flags = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
+    
+    def get_flags(self, obj):
+        flags = obj.flag.all()
+        if not flags:
+            return []
+        result = {}
+        for data in flags:
+            result['png'] = data.png_url
+            result['svg'] = data.svg_url
+            result['alt'] = data.alt_text
+        return result
+    
+    def get_capital(self, obj):
+        capitals = obj.capitals.all()
+        if not capitals:
+            return []
+        return [data.capital for data in capitals]
+    
+    def get_timezones(self, obj):
+        timezones = obj.timezones.all()
+        if not timezones:
+            return []
+        return [data.name for data in timezones]
+    
+    def get_languages(self, obj):
+        languages = obj.languages.all()
+        if not languages:
+            return []
+        result = {}
+        for lang in languages:
+            result[lang.code] = lang.name
+        return result
+    
     class Meta:
         model = Country
-        fields = ['name', 'official', 'cca2','region', 'subregion']       
+        fields = ['name', 'official', 'cca2','region','capital', 'population','timezones','flags','languages']       
