@@ -204,11 +204,11 @@ def fetch_countries(request):
 
 
 @api_view(['GET'])
-def CountryListView(request,pk=None):
+def CountryListView(request,name=None):
     countries = Country.objects.all()
     
-    if pk:
-        countries = countries.filter(name__icontains=pk)
+    if name:
+        countries = countries.filter(name__icontains=name)
     
     
     serializer = CountrySerializer(countries, many=True)
