@@ -8,4 +8,5 @@ urlpatterns = [
    
     path('fetch-countries/', views.fetch_countries, name='fetch-countries'),
     path('countries/', views.CountryListView, name='country-list'),
+    path('countries/<str:pk>', views.CountryListView, name='country-list'),
 ]

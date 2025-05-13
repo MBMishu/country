@@ -204,7 +204,14 @@ def fetch_countries(request):
 
 
 @api_view(['GET'])
-def CountryListView(request):
+def CountryListView(request,pk=None):
     countries = Country.objects.all()
+    
+    if pk:
+        countries = countries.filter(name__icontains=pk)
+    
+    
     serializer = CountrySerializer(countries, many=True)
+    
+    
     return Response(serializer.data, status=status.HTTP_200_OK)
