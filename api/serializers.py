@@ -568,4 +568,4 @@ class CountryListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Country
-        fields = ['name', 'official', 'cca2','region','capital', 'population','timezones','flags','languages']       
+        fields = ['name', 'official', 'cca2','region','capital', 'population','timezones','flags','languages','area','independent']       

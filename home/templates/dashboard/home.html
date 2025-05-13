@@ -1,0 +1,100 @@
+{% extends "dashboard/base.html" %} {% load static %} {% load humanize %}
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+    {% include 'dashboard/message.html' %}
+
+    <div class="row">
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-blue order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Countries:</h6>
+            <div class="row">
+             
+              <h2 class="text-white text-right col-10 my-auto">
+                <span>{{ total_countries }}</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-green order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Regions:</h6>
+            <div class="row">
+             
+              <h2 class="text-white text-right col-10 my-auto">
+                <span>{{ total_regions }}</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-purple order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Independent Countries:</h6>
+            <div class="row">
+              
+              <h2 class="text-right text-white col-10 my-auto">
+                <span>{{ total_independent }}</span>
+              </h2>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-blue order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Population:</h6>
+            <div class="row">
+             
+              <h2 class="text-white text-right col-10 my-auto">
+                <span>{{ total_population|intcomma }}</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-green order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Area:</h6>
+            <div class="row">
+             
+              <h2 class="text-white text-right col-10 my-auto">
+                <span>{{ total_area|floatformat:2 }}</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-purple order-card">
+          <div class="card-body">
+            <h6 class="text-white">Total Languages:</h6>
+            <div class="row">
+              
+              <h2 class="text-right text-white col-10 my-auto">
+                <span>{{ total_languages  }}</span>
+              </h2>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+     
+    </div>
+
+ 
+  </div>
+  </div>
+</div>
+{% endblock content %}
+

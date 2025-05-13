@@ -5,8 +5,10 @@ from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -202,8 +204,6 @@ def fetch_countries(request):
         return JsonResponse({'message': 'Countries fetched and saved successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'error': 'Failed to fetch countries'}, status=response.status_code)
-
-
 
 
 
