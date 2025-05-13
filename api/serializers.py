@@ -1,5 +1,220 @@
 from rest_framework import serializers
 from .models import *
+
+
+
+class CapitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = capital
+        fields = ['capital']
+
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ['code', 'name', 'symbol']
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ['code', 'name']
+        
+class BorderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Border
+        fields = ['border_country_code']
+        
+class TimezoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timezone
+        fields = ['name']
+        
+class TopLevelDomainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopLevelDomain
+        fields = ['domain']
+        
+class ContinentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Continent
+        fields = ['name']
+        
+class FlagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flag
+        fields = ['png_url', 'svg_url', 'alt_text']
+        
+class CoatOfArmsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoatOfArms
+        fields = ['png_url', 'svg_url']
+        
+class DemonymSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demonym
+        fields = ['name', 'f', 'm']
+        
+class PostalCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostalCode
+        fields = ['format', 'regex']
+        
+class SuffixSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = suffix
+        fields = ['suffix']
+        
+class IddSuffixSerializer(serializers.ModelSerializer):
+    suffix = SuffixSerializer(many=True)
+    
+    class Meta:
+        model = Idd
+        fields = ['root', 'suffix']
+
+class AltSpellingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = altSpellings
+        fields = ['alt_spelling']
+        
+class TranslationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Translation
+        fields = ['language', 'official', 'common']
+        
+class GiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gini
+        fields = ['year', 'value']
+        
+class CapitalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = capitalInfo
+        fields = ['lat', 'lng']
+        
+class CarSignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarSign
+        fields = ['sign']
+        
+class CarSerializer(serializers.ModelSerializer):
+    sign = CarSignSerializer(many=True)
+    
+    class Meta:
+        model = Car
+        fields = ['side', 'sign']
+
+class NativeNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NativeName
+        fields = ['name', 'official', 'common']
+        
+        
+class CountryModelSerializer(serializers.ModelSerializer):
+    capital = CapitalSerializer(many=True, write_only=True)
+    currency = CurrencySerializer(many=True, write_only=True)
+    language = LanguageSerializer(many=True, write_only=True)
+    border = BorderSerializer(many=True, write_only=True)
+    timezone = TimezoneSerializer(many=True, write_only=True)
+    tld = TopLevelDomainSerializer(many=True, write_only=True)
+    continent = ContinentSerializer(many=True, write_only=True)
+    flags = FlagSerializer(many=True, write_only=True)
+    coat_of_arm = CoatOfArmsSerializer(many=True, write_only=True)
+    demonym = DemonymSerializer(many=True, write_only=True)
+    postal_code = PostalCodeSerializer(many=True, write_only=True)
+    idd = IddSuffixSerializer(many=True, write_only=True)
+    alt_spelling = AltSpellingSerializer(many=True, write_only=True)
+    translation = TranslationsSerializer(many=True, write_only=True)
+    ginis = GiniSerializer(many=True, write_only=True)
+    car = CarSerializer(many=True, write_only=True)
+    native_name = NativeNameSerializer(many=True, write_only=True)
+    capital_infos = CapitalInfoSerializer(many=True, write_only=True)
+  
+    
+    
+    class Meta:
+        model = Country
+        fields = ['name', 'official', 'native_name', 'tld', 'cca2', 'ccn3', 'cioc', 'independent', 'status', 'un_member',
+                  'currency', 'idd', 'capital', 'alt_spelling', 'region', 'subregion', 'language', 'latitude',
+                  'longitude', 'landlocked', 'border', 'area', 'demonym', 'cca3', 'translation', 'flag_emoji',
+                  'google_maps', 'openstreet_maps', 'population', 'ginis', 'fifa', 'car', 'timezone', 'continent',
+                  'flags', 'coat_of_arm', 'startOfWeek', 'postal_code',
+                  'capital_infos'
+                  ]
+        
+    
+    def create(self, validated_data):
+        native_name_data = validated_data.pop('native_name', [])
+        tld_data = validated_data.pop('tld', [])
+        currency_data = validated_data.pop('currency', [])
+        idd_data = validated_data.pop('idd', [])
+        car_data = validated_data.pop('car', [])
+        capital_data = validated_data.pop('capital', [])
+        alt_spelling_data = validated_data.pop('alt_spelling', [])
+        language_data = validated_data.pop('language', [])
+        border_data = validated_data.pop('border', [])
+        demonym_data = validated_data.pop('demonym', [])
+        translation_data = validated_data.pop('translation', [])
+        ginis_data = validated_data.pop('ginis', [])
+        timezone_data = validated_data.pop('timezone', [])
+        continent_data = validated_data.pop('continent', [])
+        flags_data = validated_data.pop('flags', [])
+        coat_of_arm_data = validated_data.pop('coat_of_arm', [])
+        postal_code_data = validated_data.pop('postal_code', [])
+        capital_infos_data = validated_data.pop('capital_infos', [])
+
+        country = Country.objects.create(**validated_data)
+
+        for native in native_name_data:
+            NativeName.objects.create(country=country, **native)
+        for tld in tld_data:
+            TopLevelDomain.objects.create(country=country, **tld)
+        for curr in currency_data:
+            Currency.objects.create(country=country, **curr)
+        for idd in idd_data:
+            suffix_data = idd.pop('suffix', [])
+            idd_obj = Idd.objects.create(country=country, **idd)
+            for s in suffix_data:
+                suffix.objects.create(Idd=idd_obj, **s)
+                
+        for cap in capital_data:
+            capital.objects.create(country=country, **cap)
+        
+        for alt in alt_spelling_data:
+            altSpellings.objects.create(country=country, **alt)
+        for lang in language_data:
+            Language.objects.create(country=country, **lang)
+        for border in border_data:
+            Border.objects.create(country=country, **border)
+        for dem in demonym_data:
+            Demonym.objects.create(country=country, **dem)
+        
+        for trans in translation_data:
+            Translation.objects.create(country=country, **trans)
+        for gini in ginis_data:
+            Gini.objects.create(country=country, **gini)
+        for time in timezone_data:
+            Timezone.objects.create(country=country, **time)
+        for cont in continent_data:
+            Continent.objects.create(country=country, **cont)
+        for flag in flags_data:
+            Flag.objects.create(country=country, **flag)
+        for coat in coat_of_arm_data:
+            CoatOfArms.objects.create(country=country, **coat)
+        for postal in postal_code_data:
+            PostalCode.objects.create(country=country, **postal)
+        for cap_info in capital_infos_data:
+            capitalInfo.objects.create(country=country, **cap_info)
+            
+                    
+        for car in car_data:
+            sign_data = car.pop('sign', [])
+            car_obj = Car.objects.create(country=country, **car)
+            for sign in sign_data:
+                CarSign.objects.create(car=car_obj, **sign) 
+                
+        
+
+        return country
         
 class CountrySerializer(serializers.ModelSerializer):
     
@@ -199,15 +414,6 @@ class CountrySerializer(serializers.ModelSerializer):
                   'gini','fifa','car','timezones','continents',
                   'flags','coatOfArms','startOfWeek','capitalInfo','postalCode'
                   ]
-        # fields = ['name', 'official','nativeName','tld',
-        #           'cca2', 'cca3', 'cioc', 'independent','status','un_member','currency',
-        #           'idd','capital','alt_spellings_values','region',
-        #           'subregion','languages_value','latitude','longitude','landlocked','borders_value',
-        #           'area','demonym','cca3','translations_value','flag_emoji',
-        #           'google_maps','openstreet_maps','population','gini_value',
-        #           'fifa','car','timezones_value','continent',
-        #           'flag_value','coat_of_arms_value','startOfWeek','capital_info_value','postal_code',
-        #           ]
         
 
     

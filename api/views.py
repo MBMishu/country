@@ -205,14 +205,9 @@ def fetch_countries(request):
 
 
 
-# list all countries
-@api_view(['GET'])
-def CountryListView(request,name=None):
-    countries = Country.objects.all()
-    serializer = CountryListSerializer(countries, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
-# search countries by name
+
+# search countries by name or list all countries
 @api_view(['GET'])
 def CountryListView(request,name=None):
     countries = Country.objects.all()
@@ -252,7 +247,7 @@ def CountryDetailView(request, cca2):
 @api_view(['POST'])
 def create_country(request):
     if request.method == 'POST':
-        serializer = CountrySerializer(data=request.data)
+        serializer = CountryModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
