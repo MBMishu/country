@@ -252,6 +252,16 @@ def create_country(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# update country
+@api_view(['PUT'])
+def update_country(request, cca2):
+    country = get_object_or_404(Country, cca2=cca2)
+    serializer = CountryModelSerializer(country, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # delete country  
 @api_view(['DELETE'])

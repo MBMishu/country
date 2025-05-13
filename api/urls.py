@@ -18,4 +18,5 @@ urlpatterns = [
     
     path('countries/create/', views.create_country, name='create_country'),
     path('countries/<str:cca2>/delete/', views.delete_country, name='delete-country'),
+    path('countries/<str:cca2>/update/', views.update_country, name='update_country'),
 ]

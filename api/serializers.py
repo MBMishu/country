@@ -141,7 +141,10 @@ class CountryModelSerializer(serializers.ModelSerializer):
                   'capital_infos'
                   ]
         
-    
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('partial', False):
+            raise serializers.ValidationError("Partial updates are not allowed. Use PUT with complete data.")
+        super().__init__(*args, **kwargs)
     def create(self, validated_data):
         native_name_data = validated_data.pop('native_name', [])
         tld_data = validated_data.pop('tld', [])
@@ -215,6 +218,114 @@ class CountryModelSerializer(serializers.ModelSerializer):
         
 
         return country
+    
+    def update(self, instance, validated_data):
+        def upsert_related(model, related_name, data_list):
+            related_manager = getattr(instance, related_name)
+            # DELETE existing related data first
+            related_manager.all().delete()
+            # Create new entries
+            for item in data_list:
+                model.objects.create(country=instance, **item)
+
+        # Pop nested data
+        native_name_data = validated_data.pop('native_name', None)
+        tld_data = validated_data.pop('tld', None)
+        currency_data = validated_data.pop('currency', None)
+        idd_data = validated_data.pop('idd', None)
+        car_data = validated_data.pop('car', None)
+        capital_data = validated_data.pop('capital', None)
+        alt_spelling_data = validated_data.pop('alt_spelling', None)
+        language_data = validated_data.pop('language', None)
+        border_data = validated_data.pop('border', None)
+        demonym_data = validated_data.pop('demonym', None)
+        translation_data = validated_data.pop('translation', None)
+        ginis_data = validated_data.pop('ginis', None)
+        timezone_data = validated_data.pop('timezone', None)
+        continent_data = validated_data.pop('continent', None)
+        flags_data = validated_data.pop('flags', None)
+        coat_of_arm_data = validated_data.pop('coat_of_arm', None)
+        postal_code_data = validated_data.pop('postal_code', None)
+        capital_infos_data = validated_data.pop('capital_infos', None)
+
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        
+        if native_name_data is not None:
+            upsert_related(NativeName, 'native_names', native_name_data)
+
+        if tld_data is not None:
+            upsert_related(TopLevelDomain, 'tlds', tld_data)
+
+        if currency_data is not None:
+            upsert_related(Currency, 'currencies', currency_data)
+
+        if capital_data is not None:
+            upsert_related(capital, 'capitals', capital_data)
+
+        if alt_spelling_data is not None:
+            upsert_related(altSpellings, 'alt_spellings', alt_spelling_data)
+
+        if language_data is not None:
+            upsert_related(Language, 'languages', language_data)
+
+        if border_data is not None:
+            upsert_related(Border, 'borders', border_data)
+
+        if demonym_data is not None:
+            upsert_related(Demonym, 'demonyms', demonym_data)
+
+        if translation_data is not None:
+            upsert_related(Translation, 'translations', translation_data)
+
+        if ginis_data is not None:
+            upsert_related(Gini, 'gini', ginis_data)
+
+        if timezone_data is not None:
+            upsert_related(Timezone, 'timezones', timezone_data)
+
+        if continent_data is not None:
+            upsert_related(Continent, 'continents', continent_data)
+
+        if flags_data is not None:
+            upsert_related(Flag, 'flag', flags_data)
+
+        if coat_of_arm_data is not None:
+            upsert_related(CoatOfArms, 'coat_of_arms', coat_of_arm_data)
+
+        if postal_code_data is not None:
+            upsert_related(PostalCode, 'postal_codes', postal_code_data)
+
+        if capital_infos_data is not None:
+            upsert_related(capitalInfo, 'capital_info', capital_infos_data)
+
+        
+        if idd_data is not None:
+            instance.idds.all().delete()
+            for idd in idd_data:
+                suffix_data = idd.pop('suffix', [])
+                idd_obj = Idd.objects.create(country=instance, **idd)
+                for s in suffix_data:
+                    suffix.objects.create(Idd=idd_obj, **s)
+
+        
+        if car_data is not None:
+            instance.cars.all().delete()
+            for car in car_data:
+                sign_data = car.pop('sign', [])
+                car_obj = Car.objects.create(country=instance, **car)
+                for sign in sign_data:
+                    CarSign.objects.create(car=car_obj, **sign)
+
+        return instance
+
+
+      
+      
+      
         
 class CountrySerializer(serializers.ModelSerializer):
     
