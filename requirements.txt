@@ -6,4 +6,4 @@ markdown
 django-cors-headers
 requests
 psycopg2
-djangorestframework_simplejwt==5.3.1
+djangorestframework_simplejwt
