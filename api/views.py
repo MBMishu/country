@@ -171,7 +171,7 @@ def fetch_countries(request):
                 gini, _ = Gini.objects.get_or_create(country=country, year=year, value=value)
                 
                 
-            print(f"Gini: {year}, Created: {created}")
+            print(f"Gini: Created: {created}")
                 
             car_data = data.get('car', {})
             if car_data:
