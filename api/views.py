@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token 
+from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -209,6 +209,8 @@ def fetch_countries(request):
 
 # search countries by name or list all countries
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def CountryListView(request,name=None):
     countries = Country.objects.all()
     
@@ -221,6 +223,8 @@ def CountryListView(request,name=None):
 
 # same region countries
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def SameRegionCountriesView(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
     same_region_countries = Country.objects.filter(region=country.region).exclude(cca2=cca2)
@@ -229,6 +233,8 @@ def SameRegionCountriesView(request, cca2):
 
 # countries by language
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def CountriesByLanguageView(request, language):
     countries = Country.objects.filter(
         Q(languages__name__icontains=language) | Q(languages__code__icontains=language)
@@ -238,6 +244,8 @@ def CountriesByLanguageView(request, language):
 
 # country details by cca2
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def CountryDetailView(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
     serializer = CountrySerializer(country)
@@ -245,6 +253,8 @@ def CountryDetailView(request, cca2):
 
 # create new entry
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def create_country(request):
     if request.method == 'POST':
         serializer = CountryModelSerializer(data=request.data)
@@ -255,6 +265,8 @@ def create_country(request):
 
 # update country
 @api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def update_country(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
     serializer = CountryModelSerializer(country, data=request.data)
@@ -265,6 +277,8 @@ def update_country(request, cca2):
     
 # delete country  
 @api_view(['DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_country(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
     country.delete()

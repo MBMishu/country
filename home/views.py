@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
+from rest_framework.authtoken.models import Token 
 
 import requests
 from django.conf import settings
@@ -19,6 +20,11 @@ from .forms import *
 def home(request):
     api_url = f"{request.scheme}://{request.get_host()}/api/countries/"
     
+    token= Token.objects.get(user=request.user)
+    headers = {
+        'Authorization': f'Token {token}',
+    }
+    
     unique_country_names = set()
     unique_regions = set()
     total_population = 0
@@ -27,7 +33,7 @@ def home(request):
     unique_languages = set()
     
     try:
-        response = requests.get(api_url)
+        response = requests.get(api_url, headers=headers)
         response.raise_for_status()  # Raise an error for bad responses
         countries = response.json()
         
@@ -70,10 +76,14 @@ def home(request):
 @login_required(login_url='HandleLogin')
 def ListCountries(request):
     api_url = f"{request.scheme}://{request.get_host()}/api/countries/"
-    print(api_url)
+    
+    token= Token.objects.get(user=request.user)
+    headers = {
+        'Authorization': f'Token {token}',
+    }
     
     try:
-        response = requests.get(api_url)
+        response = requests.get(api_url,headers=headers)
         response.raise_for_status()  # Raise an error for bad responses
         countries = response.json()
     except requests.exceptions.RequestException as e:
@@ -91,9 +101,13 @@ def SameRegionCountries(request, cca2):
     
     country_url = f"{request.scheme}://{request.get_host()}/api/country-details/{cca2}/"
     print(country_url)
+    token= Token.objects.get(user=request.user)
+    headers = {
+        'Authorization': f'Token {token}',
+    }
     
     try:
-        response = requests.get(country_url)
+        response = requests.get(country_url, headers=headers)
         response.raise_for_status()  # Raise an error for bad responses
         country = response.json()
     except requests.exceptions.RequestException as e:
@@ -105,7 +119,7 @@ def SameRegionCountries(request, cca2):
     api_url = f"{request.scheme}://{request.get_host()}/api/same-region/{cca2}/"
     
     try:
-        response = requests.get(api_url)
+        response = requests.get(api_url, headers=headers)
         response.raise_for_status()  # Raise an error for bad responses
         countries = response.json()
     except requests.exceptions.RequestException as e:
@@ -138,6 +152,8 @@ def HandleRegister(request):
         # Create the user
         user = User.objects.create_user(username=email, email=email, password=password)
         
+        token, _ = Token.objects.get_or_create(user=user)
+        
         messages.success(request, "Account was created")
         return redirect('HandleLogin')
     
@@ -153,6 +169,7 @@ def HandleLogin(request):
         user = authenticate(request, username=email, password=password)
         
         if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
             login(request, user)
             messages.success(request, "Successfully Logged In.")
             return redirect('home')
