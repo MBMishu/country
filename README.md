@@ -75,7 +75,7 @@ pip install -r requirements.txt
 
 <h2>Apply Migrations (Set Up the Database)</h2>
 
-I have used Postgresql Database for this project. All you have to do just open pgAdmin and create new Database called country.
+I have used Postgresql Database for this project. All you have to do just open pgAdmin and create new Database called **country**.
 
 ```
 python manage.py makemigrations
