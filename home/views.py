@@ -65,3 +65,20 @@ def home(request):
         'total_languages': len(unique_languages),
     }
     return render(request, 'dashboard/home.html', context)
+
+def ListCountries(request):
+    api_url = f"{request.scheme}://{request.get_host()}/api/countries/"
+    print(api_url)
+    
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an error for bad responses
+        countries = response.json()
+    except requests.exceptions.RequestException as e:
+        countries = []
+        print(f"Error fetching countries: {e}")
+    
+    context = {
+        'countries': countries,
+    }
+    return render(request, 'dashboard/countries.html', context)

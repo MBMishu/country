@@ -1,0 +1,102 @@
+{% extends "dashboard/base.html" %} {% load static %}{% load humanize %} {% block content %}
+<section class="pcoded-main-container">
+    <div class="pcoded-content">
+        {% include 'dashboard/message.html' %}
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">All Country List</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'home' %}"><i class="feather icon-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#!">All Country List</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 mx-auto">
+                <div class="card">
+                    <div class="card-header mr-auto">
+                        <h5>All Country List</h5>
+                    </div>
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive table-bordered">
+                            <table class="table " id="table_id">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        
+                                        <th>Details</th>
+                                        <th>Flag</th>
+                                        <th>Country Name</th>
+                                        <th>cca2</th>
+                                        <th>Capital</th>
+                                        <th>Population</th>
+                                        <th>Timezone</th>
+                                        
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody class="table-striped table-hover">
+
+                                    {% for item in countries %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                         <td><a href="" class="btn btn-sm btn-warning"> Details</a></td>
+                                         <td><a class="venobox" href="{{item.flags.png}}"> <img src="{{item.flags.png}}" width="120px" class="img-fluid img-responsive" alt="{{item.flags.alt}}"></a></td>
+                                       <td>{{item.name}}</td>
+                                       <td>{{item.cca2}}</td>
+                                        <td>{{ item.capital|join:", " }}</td>
+                                        <td>{{item.population|intcomma}}</td>
+                                        <td>{{ item.timezones|join:", " }}</td>
+                                        
+                                    </tr>
+
+
+                                    {% endfor %}
+                                    <tfoot class="thead-dark">
+                                        <tr>
+                                           <th>#</th>
+                                        
+                                        <th>Details</th>
+                                        <th>Flag</th>
+                                        <th>Name</th>
+                                        <th>cca2</th>
+                                        <th>Capital</th>
+                                        <th>Population</th>
+                                        <th>Timezone</th>
+                                        </tr>
+                                    </tfoot>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %} {% block javascripts %}
+<script>
+    $(".venobox").venobox({
+        spinner: "cube-grid",
+        share: false,
+    });
+    $(document).ready(function() {
+
+
+        $('#table_id').DataTable();
+
+    });
+</script>
+{% endblock javascripts %}

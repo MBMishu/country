@@ -7,4 +7,5 @@ from .views import *
 
 urlpatterns = [
     path('', views.home, name="home"),
+    path('countries/', views.ListCountries, name="ListCountries"),
 ]
