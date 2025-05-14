@@ -107,6 +107,9 @@ def SameRegionCountries(request, cca2):
     except requests.exceptions.RequestException as e:
         countries = []
         print(f"Error fetching countries: {e}")
+        
+    
+    
     
     context = {
         'country': country,

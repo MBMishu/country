@@ -25,7 +25,7 @@
     </div>
 
     <!-- Country Details -->
-    <!-- Country Details -->
+
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card shadow rounded-4">
@@ -101,7 +101,7 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h5>Other Countries in {{ country.region }}</h5>
+            <h5>Other Countries in {{ country.region }} Region</h5>
           </div>
           <div class="card-body table-border-style">
             <div class="table-responsive table-bordered">
@@ -112,10 +112,7 @@
                     <th>Details</th>
                     <th>Flag</th>
                     <th>Country Name</th>
-                    <th>cca2</th>
-                    <th>Capital</th>
-                    <th>Population</th>
-                    <th>Timezone</th>
+                    <th>Spoken Languages</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -140,10 +137,11 @@
                       /></a>
                     </td>
                     <td>{{item.name}}</td>
-                    <td>{{item.cca2}}</td>
-                    <td>{{ item.capital|join:", " }}</td>
-                    <td>{{item.population}}</td>
-                    <td>{{ item.timezones|join:", " }}</td>
+                    <td>
+                      {% for key, lang in item.languages.items %}
+                      <span class="badge badge-success">{{ lang }}</span>
+                      {% endfor %}
+                    </td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -153,10 +151,7 @@
                     <th>Details</th>
                     <th>Flag</th>
                     <th>Country Name</th>
-                    <th>cca2</th>
-                    <th>Capital</th>
-                    <th>Population</th>
-                    <th>Timezone</th>
+                    <th>Spoken Languages</th>
                   </tr>
                 </tfoot>
               </table>
