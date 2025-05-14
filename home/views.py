@@ -15,7 +15,7 @@ from .decorators import *
 from api.models import *
 from .forms import *
 
-
+@login_required(login_url='HandleLogin')
 def home(request):
     api_url = f"{request.scheme}://{request.get_host()}/api/countries/"
     
@@ -66,6 +66,8 @@ def home(request):
     }
     return render(request, 'dashboard/home.html', context)
 
+
+@login_required(login_url='HandleLogin')
 def ListCountries(request):
     api_url = f"{request.scheme}://{request.get_host()}/api/countries/"
     print(api_url)
@@ -83,6 +85,8 @@ def ListCountries(request):
     }
     return render(request, 'dashboard/countries.html', context)
 
+
+@login_required(login_url='HandleLogin')
 def SameRegionCountries(request, cca2):
     
     country_url = f"{request.scheme}://{request.get_host()}/api/country-details/{cca2}/"
@@ -116,3 +120,47 @@ def SameRegionCountries(request, cca2):
         'countries': countries,
     }
     return render(request, 'dashboard/countries-details.html', context)
+
+
+def HandleLogout(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('home')
+
+
+@unauthenticated_user
+def HandleRegister(request):
+    if request.method == 'POST':
+        fullname = request.POST.get('fullname', '').strip()
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '').strip()
+        
+        # Create the user
+        user = User.objects.create_user(username=email, email=email, password=password)
+        
+        messages.success(request, "Account was created")
+        return redirect('HandleLogin')
+    
+    return render(request, 'dashboard/register.html')
+
+
+@unauthenticated_user
+def HandleLogin(request):
+    form = UserLoginForm()
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '').strip()
+        user = authenticate(request, username=email, password=password)
+        
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Successfully Logged In.")
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid Login Credentials.")
+    
+    context = {'form': form
+
+               }
+    
+    return render(request, 'dashboard/login.html', context)

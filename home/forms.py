@@ -20,30 +20,5 @@ class UserLoginForm(forms.Form):
                 "class": "form-control"
             }
         ))
-    
-class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField(
-        widget=forms.EmailInput(
-            attrs={
-                "placeholder" : "Your Email Id",                
-                "class": "form-control"
-            }
-        ))
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder" : "Password",                
-                "class": "form-control"
-            }
-        ))
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder" : "Confirm Password",                
-                "class": "form-control"
-            }
-        ))
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
+
         

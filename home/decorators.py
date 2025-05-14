@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 
 def unauthenticated_user(view_func):
 	def wrapper_func(request, *args, **kwargs):
-		if request.user.is_authenticated and request.user.is_staff:
+		if request.user.is_authenticated:
 			return redirect('home')
 		else:
 			return view_func(request, *args, **kwargs)
