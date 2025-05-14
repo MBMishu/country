@@ -1,0 +1,181 @@
+{% extends "dashboard/base.html" %} {% load static %} {% block content %}
+
+<section class="pcoded-main-container">
+  <div class="pcoded-content">
+    {% include 'dashboard/message.html' %}
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">{{ country.official }} Details</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'ListCountries' %}"
+                  ><i class="feather icon-home"></i
+                ></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Country Details</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Country Details -->
+    <!-- Country Details -->
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow rounded-4">
+          <div class="card-body bg-light">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <p>
+                  <strong><i class="feather icon-flag"></i> Name:</strong>
+                  {{country.name }}
+                </p>
+                <p>
+                  <strong><i class="feather icon-hash"></i> CCA2:</strong>
+                  {{country.cca2 }}
+                </p>
+                <p>
+                  <strong><i class="feather icon-map-pin"></i> Capital:</strong>
+                  <span class="badge badge-info"
+                    >{{ country.capital|join:", " }}</span
+                  >
+                </p>
+                <p>
+                  <strong><i class="feather icon-layers"></i> Region:</strong>
+                  {{ country.region }}
+                </p>
+                <p>
+                  <strong><i class="feather icon-map"></i> Subregion:</strong>
+                  {{ country.subregion }}
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p>
+                  <strong
+                    ><i class="feather icon-users"></i> Population:</strong
+                  >
+                  <span class="badge badge-pill badge-primary"
+                    >{{ country.population }}</span
+                  >
+                </p>
+                <p>
+                  <strong
+                    ><i class="feather icon-message-circle"></i>
+                    Languages:</strong
+                  >
+                  {% for key, lang in country.languages.items %}
+                  <span class="badge badge-success">{{ lang }}</span>
+                  {% endfor %}
+                </p>
+                <p>
+                  <strong><i class="feather icon-clock"></i> Timezones:</strong>
+                  {% for tz in country.timezones %}
+                  <span class="badge badge-warning">{{ tz }}</span>
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
+            <div class="text-center">
+              <a class="venobox" href="{{ country.flags.png }}">
+                <img
+                  src="{{ country.flags.png }}"
+                  width="180px"
+                  class="img-fluid rounded shadow-sm border"
+                  alt="{{ country.flags.alt }}"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Same Region Countries -->
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Other Countries in {{ country.region }}</h5>
+          </div>
+          <div class="card-body table-border-style">
+            <div class="table-responsive table-bordered">
+              <table class="table" id="table_id">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Details</th>
+                    <th>Flag</th>
+                    <th>Country Name</th>
+                    <th>cca2</th>
+                    <th>Capital</th>
+                    <th>Population</th>
+                    <th>Timezone</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in countries %}
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                      <a
+                        href="{% url 'SameRegionCountries' item.cca2 %}"
+                        class="btn btn-sm btn-info"
+                      >
+                        Details</a
+                      >
+                    </td>
+                    <td>
+                      <a class="venobox" href="{{item.flags.png}}">
+                        <img
+                          src="{{item.flags.png}}"
+                          width="120px"
+                          class="img-fluid img-responsive"
+                          alt="{{item.flags.alt}}"
+                      /></a>
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.cca2}}</td>
+                    <td>{{ item.capital|join:", " }}</td>
+                    <td>{{item.population}}</td>
+                    <td>{{ item.timezones|join:", " }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Details</th>
+                    <th>Flag</th>
+                    <th>Country Name</th>
+                    <th>cca2</th>
+                    <th>Capital</th>
+                    <th>Population</th>
+                    <th>Timezone</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %} {% block javascripts %}
+<script>
+  $(".venobox").venobox({
+    spinner: "cube-grid",
+    share: false,
+  });
+
+  $(document).ready(function () {
+    $("#table_id").DataTable();
+  });
+</script>
+{% endblock javascripts %}

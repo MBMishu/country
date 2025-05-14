@@ -12,7 +12,7 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}"><i class="feather icon-home"></i></a>
+                                <a href="{% url 'ListCountries' %}"><i class="feather icon-home"></i></a>
                             </li>
                             <li class="breadcrumb-item">
                                 <a href="#!">All Country List</a>
@@ -52,7 +52,7 @@
                                     {% for item in countries %}
                                     <tr>
                                         <td>{{forloop.counter}}</td>
-                                         <td><a href="" class="btn btn-sm btn-warning"> Details</a></td>
+                                         <td><a href="{% url 'SameRegionCountries' item.cca2 %}" class="btn btn-sm btn-info"> Details</a></td>
                                          <td><a class="venobox" href="{{item.flags.png}}"> <img src="{{item.flags.png}}" width="120px" class="img-fluid img-responsive" alt="{{item.flags.alt}}"></a></td>
                                        <td>{{item.name}}</td>
                                        <td>{{item.cca2}}</td>

@@ -8,4 +8,6 @@ from .views import *
 urlpatterns = [
     path('', views.home, name="home"),
     path('countries/', views.ListCountries, name="ListCountries"),
+    
+    path('countries-similar/<str:cca2>/', views.SameRegionCountries, name="SameRegionCountries"),
 ]

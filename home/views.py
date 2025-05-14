@@ -82,3 +82,34 @@ def ListCountries(request):
         'countries': countries,
     }
     return render(request, 'dashboard/countries.html', context)
+
+def SameRegionCountries(request, cca2):
+    
+    country_url = f"{request.scheme}://{request.get_host()}/api/country-details/{cca2}/"
+    print(country_url)
+    
+    try:
+        response = requests.get(country_url)
+        response.raise_for_status()  # Raise an error for bad responses
+        country = response.json()
+    except requests.exceptions.RequestException as e:
+        country = {}
+        print(f"Error fetching country details: {e}")
+        
+   
+    
+    api_url = f"{request.scheme}://{request.get_host()}/api/same-region/{cca2}/"
+    
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an error for bad responses
+        countries = response.json()
+    except requests.exceptions.RequestException as e:
+        countries = []
+        print(f"Error fetching countries: {e}")
+    
+    context = {
+        'country': country,
+        'countries': countries,
+    }
+    return render(request, 'dashboard/countries-details.html', context)
