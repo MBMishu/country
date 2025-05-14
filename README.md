@@ -111,3 +111,19 @@ Technologies used in the project:
 - Restful Api
 - PostgreSQL
 - Bootstrap 4
+
+<h2>📘 API Documentation</h2>
+
+[👉 Click To View API Documentation on Postman](https://documenter.getpostman.com/view/16581078/2sB2qUnjZS)
+
+This documentation includes:
+
+- Fetching Data and store them
+- List of All countries
+- Create new Country entry
+- Update Exiting Country Entry
+- Delete Exiting Country Entry
+- Retrieve a specific Country Details
+- Search By country Name / Partially Also
+- Same Region country List
+- Same Spoken Language Cuntry List
